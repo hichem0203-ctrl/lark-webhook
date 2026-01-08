@@ -11,16 +11,17 @@ def health():
 async def lark_approval(req: Request):
     try:
         payload = await req.json()
-    except Exception:
-        # If JSON parsing fails
+    except:
         return JSONResponse(content={"code": 0})
 
-    print("Received payload:", payload)
-
-    # 🔑 Lark challenge verification
+    # 🔑 Respond to challenge immediately
     if "challenge" in payload:
-        return JSONResponse(content={"challenge": payload["challenge"]})
+        return JSONResponse(
+            content={"challenge": payload["challenge"]},
+            status_code=200,
+            media_type="application/json"
+        )
 
-    # Acknowledge other events
+    # Otherwise, acknowledge event
     return JSONResponse(content={"code": 0})
 
