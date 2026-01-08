@@ -5,14 +5,17 @@ app = FastAPI()
 
 @app.post("/lark/approval")
 async def lark_approval(req: Request):
-    payload = await req.json()
-    
-    # 🔹 Step 1: Handle Lark challenge
+    try:
+        payload = await req.json()
+    except:
+        return JSONResponse(content={"error": "invalid json"}, status_code=400)
+
+    # 🔹 Handle Lark challenge first
     if "challenge" in payload:
         return JSONResponse(content={"challenge": payload["challenge"]})
-    
-    # 🔹 Step 2: Log normal approvals (we’ll keep it simple for now)
+
+    # 🔹 Just log approvals for now
     print("Approval payload received:", payload)
-    
+
     return JSONResponse(content={"code": 0})
 
