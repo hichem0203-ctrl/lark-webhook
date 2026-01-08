@@ -9,13 +9,18 @@ def health():
 
 @app.post("/lark/approval")
 async def lark_approval(req: Request):
-    payload = await req.json()
+    try:
+        payload = await req.json()
+    except Exception:
+        # If JSON parsing fails
+        return JSONResponse(content={"code": 0})
+
     print("Received payload:", payload)
 
-    # 🔑 Lark webhook challenge verification
+    # 🔑 Lark challenge verification
     if "challenge" in payload:
         return JSONResponse(content={"challenge": payload["challenge"]})
 
-    # For now, just acknowledge the event
+    # Acknowledge other events
     return JSONResponse(content={"code": 0})
 
